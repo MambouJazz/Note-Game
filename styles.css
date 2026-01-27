@@ -1,0 +1,102 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  display: flex;
+flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f8ff;
+}
+
+.container {
+  text-align: center;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  max-width: 100%;
+}
+
+.note-container {
+  font-size: 3em;
+  margin: 20px 0;
+}
+
+.question-container {
+  margin-top: 30px;
+}
+
+.answer-input {
+  font-size: 1.2em;
+  padding: 10px;
+  width: 100px;
+  margin: 10px 0;
+  text-align: center;
+  border: 2px solid #3b5998;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.submit-button {
+  padding: 10px 20px;
+  font-size: 1.2em;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.feedback {
+  margin-top: 20px;
+  font-size: 1.2em;
+  color: #ff5722;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #3b5998;
+}
+.note-img {
+  width: 50px;  /* 画像の幅を50pxに設定 */
+  height: 50px; /* 画像の高さを50pxに設定 */
+  margin: 0 10px; /* 画像間のスペースを調整 */
+}
+#startBtn {
+  font-size: 24px;   /* 文字を大きく */
+  padding: 15px 30px; /* ボタンの余白 */
+}
+#levelSelect {
+  margin-bottom: 20px;
+}
+
+.levelBtn {
+  font-size: 18px;
+  padding: 10px 20px;
+  margin: 5px;
+}
+
+.ansBtn.active {
+  background-color: #ffeb3b;
+  transform: scale(1.1);
+}
+#answerButtons button {
+  font-size: 20px;
+  padding: 12px 18px;
+  margin: 6px;
+}
+
+#answerButtons button.active {
+  background-color: #ffd966;
+}
