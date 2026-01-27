@@ -100,3 +100,18 @@ h1 {
 #answerButtons button.active {
   background-color: #ffd966;
 }
+
+#answerButtons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: nowrap;      /* ★ 折り返さない */
+  gap: 8px;
+  overflow-x: auto;       /* どうしても無理なら横スクロール */
+}
+
+#answerButtons button {
+  flex: 0 0 auto;
+  font-size: clamp(14px, 4vw, 22px); /* ★ 画面幅に応じて縮小 */
+  padding: 10px 14px;
+  min-width: 48px;
+}
