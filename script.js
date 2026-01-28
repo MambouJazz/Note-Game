@@ -7,8 +7,7 @@ let correctAnswer = 0;
 let score = 0;
 let timeLeft = 10;
 let timer = null;
-
-// ボタン入力用
+let isPlaying = false; // ★ゲーム中フラグ
 let currentInput = 0;
 
 // DOM
@@ -52,12 +51,19 @@ const level3Notes = [
 
 document.querySelectorAll(".levelBtn").forEach(btn => {
   btn.addEventListener("click", () => {
+    // ★ active を全て外す
+    document.querySelectorAll(".levelBtn").forEach(b =>
+      b.classList.remove("active")
+    );
+
+    // ★ 押したボタンだけ active
+    btn.classList.add("active");
+
     currentLevel = Number(btn.dataset.level);
     resetGame();
     showRanking();
   });
 });
-
 // =====================
 // スタート
 // =====================
@@ -76,6 +82,7 @@ function resetGame() {
   score = 0;
   timeLeft = 10;
   currentInput = 0;
+  isPlaying = false; // ★一旦止める
 
   scoreText.textContent = "スコア：0";
   countdownText.textContent = "";
@@ -83,6 +90,7 @@ function resetGame() {
 }
 
 function startCountdown() {
+  isPlaying = true; // ★ゲーム開始
   countdownText.textContent = "スタート！";
 
   timer = setInterval(() => {
@@ -91,6 +99,7 @@ function startCountdown() {
 
     if (timeLeft <= 0) {
       clearInterval(timer);
+      isPlaying = false; // ★ここで完全停止
       countdownText.textContent = "終了！";
       saveScore(score);
       showRanking();
@@ -106,6 +115,8 @@ function startCountdown() {
 // =====================
 
 function nextQuestion() {
+  if (!isPlaying) return; // ★時間切れ対策
+
   notesDiv.innerHTML = "";
   currentInput = 0;
 
@@ -165,6 +176,8 @@ function showNotes(notes) {
 // =====================
 
 function pressValue(value, button) {
+  if (!isPlaying) return; // ★時間切れ後は完全無視
+
   currentInput += value;
 
   // ボタンを光らせる
