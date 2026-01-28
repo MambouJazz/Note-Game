@@ -102,21 +102,14 @@ h1 {
 }
 
 #answerButtons {
-  display: flex;
-  align-items: center;
-  flex-wrap: nowrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3列 */
   gap: 10px;
-
-  width: 100%;
-  overflow-x: auto;
-
-  justify-content: flex-start; /* ★超重要 */
-  padding: 10px;
+  max-width: 360px;   /* スマホ想定 */
+  margin: 0 auto;
 }
 
 #answerButtons button {
-  flex: 0 0 auto;
-  font-size: clamp(14px, 4vw, 22px);
-  padding: 12px 18px;
-  min-width: 56px;
+  font-size: 18px;
+  padding: 14px 0;
 }
