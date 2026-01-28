@@ -7,8 +7,12 @@ let correctAnswer = 0;
 let score = 0;
 let timeLeft = 10;
 let timer = null;
-let isPlaying = false; // ★ゲーム中フラグ
+let isPlaying = false;
 let currentInput = 0;
+
+// ★ 間違えた問題の記録用
+let wrongQuestions = [];
+let currentNotes = [];
 
 // DOM
 const notesDiv = document.getElementById("notes");
@@ -51,19 +55,18 @@ const level3Notes = [
 
 document.querySelectorAll(".levelBtn").forEach(btn => {
   btn.addEventListener("click", () => {
-    // ★ active を全て外す
-    document.querySelectorAll(".levelBtn").forEach(b =>
-      b.classList.remove("active")
-    );
-
-    // ★ 押したボタンだけ active
-    btn.classList.add("active");
-
     currentLevel = Number(btn.dataset.level);
+
+    document.querySelectorAll(".levelBtn").forEach(b =>
+      b.classList.remove("selected")
+    );
+    btn.classList.add("selected");
+
     resetGame();
     showRanking();
   });
 });
+
 // =====================
 // スタート
 // =====================
@@ -82,15 +85,21 @@ function resetGame() {
   score = 0;
   timeLeft = 10;
   currentInput = 0;
-  isPlaying = false; // ★一旦止める
+  isPlaying = false;
+  wrongQuestions = [];
 
   scoreText.textContent = "スコア：0";
   countdownText.textContent = "";
   notesDiv.innerHTML = "";
+
+  const review = document.getElementById("review");
+  const title = document.getElementById("reviewTitle");
+  if (review) review.innerHTML = "";
+  if (title) title.style.display = "none";
 }
 
 function startCountdown() {
-  isPlaying = true; // ★ゲーム開始
+  isPlaying = true;
   countdownText.textContent = "スタート！";
 
   timer = setInterval(() => {
@@ -99,10 +108,13 @@ function startCountdown() {
 
     if (timeLeft <= 0) {
       clearInterval(timer);
-      isPlaying = false; // ★ここで完全停止
+      isPlaying = false;
       countdownText.textContent = "終了！";
+
       saveScore(score);
       showRanking();
+      showReview();
+
       notesDiv.innerHTML = "";
     }
   }, 1000);
@@ -115,7 +127,7 @@ function startCountdown() {
 // =====================
 
 function nextQuestion() {
-  if (!isPlaying) return; // ★時間切れ対策
+  if (!isPlaying) return;
 
   notesDiv.innerHTML = "";
   currentInput = 0;
@@ -131,7 +143,8 @@ function nextQuestion() {
 
 function makeLevel1Question() {
   const note = randomFrom(level1Notes);
-  showNotes([note]);
+  currentNotes = [note];
+  showNotes(currentNotes);
   correctAnswer = note.value;
 }
 
@@ -145,6 +158,7 @@ function makeMultipleNotes(noteList, count) {
     total += note.value;
   }
 
+  currentNotes = selected;
   showNotes(selected);
   correctAnswer = total;
 }
@@ -176,11 +190,10 @@ function showNotes(notes) {
 // =====================
 
 function pressValue(value, button) {
-  if (!isPlaying) return; // ★時間切れ後は完全無視
+  if (!isPlaying) return;
 
   currentInput += value;
 
-  // ボタンを光らせる
   button.classList.add("active");
   setTimeout(() => button.classList.remove("active"), 150);
 
@@ -191,8 +204,55 @@ function pressValue(value, button) {
     nextQuestion();
   } else if (currentInput > correctAnswer) {
     wrongSound.play();
+
+    if (currentLevel !== 1) {
+      wrongQuestions.push({
+        notes: currentNotes,
+        correct: correctAnswer
+      });
+    }
+
     nextQuestion();
   }
+}
+
+// =====================
+// 間違えた問題の表示
+// =====================
+
+function showReview() {
+  if (currentLevel === 1 || wrongQuestions.length === 0) return;
+
+  const review = document.getElementById("review");
+  const title = document.getElementById("reviewTitle");
+  if (!review || !title) return;
+
+  title.style.display = "block";
+  review.innerHTML = "";
+
+  wrongQuestions.forEach(q => {
+    const row = document.createElement("div");
+    row.style.marginBottom = "6px";
+
+    q.notes.forEach((note, index) => {
+      const img = document.createElement("img");
+      img.src = note.img;
+      img.style.height = "40px";
+      img.style.margin = "0 4px";
+      row.appendChild(img);
+
+      if (index < q.notes.length - 1) {
+        row.appendChild(document.createTextNode("＋"));
+      }
+    });
+
+    const ans = document.createElement("div");
+    ans.textContent = `正解：${q.correct}`;
+    ans.style.fontSize = "14px";
+
+    review.appendChild(row);
+    review.appendChild(ans);
+  });
 }
 
 // =====================
