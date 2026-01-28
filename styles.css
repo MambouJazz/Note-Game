@@ -1,115 +1,101 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* 全体 */
 body {
-  font-family: 'Arial', sans-serif;
-  display: flex;
-flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f8ff;
-}
-
-.container {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+               "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
   text-align: center;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  max-width: 100%;
-}
-
-.note-container {
-  font-size: 3em;
-  margin: 20px 0;
-}
-
-.question-container {
-  margin-top: 30px;
-}
-
-.answer-input {
-  font-size: 1.2em;
+  margin: 0;
   padding: 10px;
-  width: 100px;
-  margin: 10px 0;
-  text-align: center;
-  border: 2px solid #3b5998;
-  border-radius: 5px;
-  outline: none;
-  transition: border-color 0.3s;
+  background: #f7f7f7;
 }
 
-.submit-button {
-  padding: 10px 20px;
-  font-size: 1.2em;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.feedback {
-  margin-top: 20px;
-  font-size: 1.2em;
-  color: #ff5722;
-  font-weight: bold;
-}
-
+/* 見出し */
 h1 {
-  font-size: 2em;
-  margin-bottom: 20px;
-  color: #3b5998;
+  font-size: 24px;
+  margin-bottom: 10px;
 }
-.note-img {
-  width: 50px;  /* 画像の幅を50pxに設定 */
-  height: 50px; /* 画像の高さを50pxに設定 */
-  margin: 0 10px; /* 画像間のスペースを調整 */
-}
-#startBtn {
-  font-size: 24px;   /* 文字を大きく */
-  padding: 15px 30px; /* ボタンの余白 */
-}
+
+/* レベル選択 */
 #levelSelect {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .levelBtn {
-  font-size: 18px;
-  padding: 10px 20px;
-  margin: 5px;
+  font-size: 16px;
+  padding: 8px 14px;
+  margin: 4px;
 }
 
-.ansBtn.active {
-  background-color: #ffeb3b;
-  transform: scale(1.1);
-}
-#answerButtons button {
-  font-size: 20px;
-  padding: 12px 18px;
-  margin: 6px;
+/* スタートボタン */
+#startBtn {
+  font-size: 24px;
+  padding: 14px 40px;
+  margin: 10px 0;
 }
 
-#answerButtons button.active {
-  background-color: #ffd966;
+/* カウントダウン */
+#countdown {
+  font-size: 22px;
+  margin: 10px 0;
 }
 
+/* 音符表示 */
+.note-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.note-container img {
+  height: 80px;
+  margin: 0 6px;
+}
+
+/* 回答ボタン（スマホ最優先） */
 #answerButtons {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3列 */
+  grid-template-columns: repeat(3, 1fr); /* 2段配置 */
   gap: 10px;
-  max-width: 360px;   /* スマホ想定 */
-  margin: 0 auto;
+  max-width: 360px;
+  margin: 0 auto 15px;
 }
 
 #answerButtons button {
   font-size: 18px;
   padding: 14px 0;
+  border-radius: 8px;
+  border: 1px solid #888;
+  background: #fff;
+}
+
+/* 押したときに光る */
+#answerButtons button.active {
+  background: #ffd966;
+}
+
+/* スコア */
+#score {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+/* ランキング */
+#ranking {
+  max-width: 240px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+/* PC・電子黒板用（横一列に戻す） */
+@media (min-width: 768px) {
+  #answerButtons {
+    grid-template-columns: repeat(6, auto);
+    max-width: none;
+    justify-content: center;
+  }
+
+  #answerButtons button {
+    padding: 12px 18px;
+    font-size: 18px;
+  }
 }
