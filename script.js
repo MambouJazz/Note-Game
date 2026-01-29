@@ -12,16 +12,16 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// Firebase設定（自分のものに置き換えてください）
+// Firebase config（※実際はあなたのものを使用）
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyApFeYhgvjlRj-0e2tMLp5sbWigohvdjKs",
+  authDomain: "note-game-da61b.firebaseapp.com",
+  projectId: "note-game-da61b",
+  storageBucket: "note-game-da61b.firebasestorage.app",
+  messagingSenderId: "713519714721",
+  appId: "1:713519714721:web:2f9134e804d6f1e4a77be0",
+  measurementId: "G-6R83CXLRWH"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
