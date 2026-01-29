@@ -2,15 +2,7 @@
 // Firebase
 // =====================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  limit,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // Firebase config（※実際はあなたのものを使用）
 const firebaseConfig = {
@@ -22,10 +14,8 @@ const firebaseConfig = {
   appId: "1:713519714721:web:2f9134e804d6f1e4a77be0",
   measurementId: "G-6R83CXLRWH"
 };
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
 // =====================
 // ゲーム状態
 // =====================
@@ -36,16 +26,19 @@ let timeLeft = 10;
 let timer = null;
 let isPlaying = false;
 let currentInput = 0;
-let wrongCount = 0; // 連続不正解カウント
-
-let missCount = 0;
-const MISS_LIMIT = 3;
+let wrongQuestions = [];
+let lastPressed = null; // 初級連打防止用
 
 // DOM
 const notesDiv = document.getElementById("notes");
 const scoreText = document.getElementById("score");
 const countdownText = document.getElementById("countdown");
+const wrongDiv = document.getElementById("wrongQuestions");
 const nameInput = document.getElementById("playerName");
+
+// 効果音
+const correctSound = new Audio("correct.mp3");
+const wrongSound = new Audio("wrong.mp3");
 
 // =====================
 // 音符データ
@@ -55,13 +48,8 @@ const level1Notes = [
   { img: "half-note.png", value: 2 },
   { img: "full-note.png", value: 4 }
 ];
-
 const level2Notes = level1Notes;
-
-const level3Notes = [
-  ...level1Notes,
-  { img: "dotted-half-note.png", value: 3 }
-];
+const level3Notes = [...level1Notes, { img: "dotted-half-note.png", value: 3 }];
 
 // =====================
 // レベル選択
@@ -90,32 +78,29 @@ function resetGame() {
   clearInterval(timer);
   score = 0;
   timeLeft = 10;
-  isPlaying = false;
   currentInput = 0;
-  missCount = 0;
-
+  isPlaying = false;
+  wrongQuestions = [];
+  lastPressed = null;
   scoreText.textContent = "スコア：0";
   countdownText.textContent = "";
   notesDiv.innerHTML = "";
+  wrongDiv.innerHTML = "";
 }
 
 function startGame() {
-  if (!nameInput.value) {
-    alert("名前を入力してください");
-    return;
-  }
-
+  if (!nameInput.value) { alert("名前を入力してください"); return; }
   isPlaying = true;
   countdownText.textContent = "スタート！";
 
   timer = setInterval(() => {
     timeLeft--;
     countdownText.textContent = `残り ${timeLeft} 秒`;
-
     if (timeLeft <= 0) {
       clearInterval(timer);
       isPlaying = false;
       countdownText.textContent = "終了！";
+      showWrongAnswers();
       saveScore();
     }
   }, 1000);
@@ -128,9 +113,9 @@ function startGame() {
 // =====================
 function nextQuestion() {
   if (!isPlaying) return;
-
   notesDiv.innerHTML = "";
   currentInput = 0;
+  lastPressed = null;
 
   if (currentLevel === 1) {
     const note = randomFrom(level1Notes);
@@ -153,7 +138,6 @@ function showNotes(notes) {
     const img = document.createElement("img");
     img.src = note.img;
     notesDiv.appendChild(img);
-
     if (i < notes.length - 1) {
       const plus = document.createElement("span");
       plus.textContent = "＋";
@@ -164,91 +148,80 @@ function showNotes(notes) {
 }
 
 // =====================
-// 入力処理
+// 入力
 // =====================
-let wrongCount = 0; // 連続不正解カウント
-
-window.pressValue = function (value, btn) {
+window.pressValue = function(value, btn) {
   if (!isPlaying) return;
 
-  // 1回の回答として currentInput に代入（加算ではなく）
-  currentInput = value;
+  // 初級は同じボタン連打防止
+  if (currentLevel === 1 && lastPressed === value) return;
+  lastPressed = value;
 
-  // ボタンを光らせる
+  currentInput += value;
   btn.classList.add("active");
   setTimeout(() => btn.classList.remove("active"), 150);
 
-  // 判定
   if (Math.abs(currentInput - correctAnswer) < 0.001) {
-    correctSound.play();
     score++;
+    correctSound.play();
     scoreText.textContent = `スコア：${score}`;
-    wrongCount = 0; // 正解したらリセット
-  } else {
+    nextQuestion();
+  } else if (currentInput > correctAnswer) {
     wrongSound.play();
-    wrongCount++;
-    if (wrongCount >= 3) {
-      // 失格
-      countdownText.textContent = "失格！";
-      isPlaying = false;
-      clearInterval(timer);
-      saveScore();
-      notesDiv.innerHTML = "";
-      return;
+    if (currentLevel > 1) {
+      wrongQuestions.push({ correctAnswer });
     }
+    nextQuestion();
   }
-
-  // 次の問題へ
-  nextQuestion();
 };
 
 // =====================
-// 失格処理
+// 間違えた問題表示
 // =====================
-function gameOver() {
-  clearInterval(timer);
-  isPlaying = false;
-  countdownText.textContent = "失格！（不正解3回）";
+function showWrongAnswers() {
+  wrongDiv.innerHTML = "";
+  wrongQuestions.forEach(wq => {
+    const li = document.createElement("li");
+    li.textContent = `正答：${wq.correctAnswer}`;
+    wrongDiv.appendChild(li);
+  });
 }
 
 // =====================
 // Firestore 保存・取得
 // =====================
 async function saveScore() {
-  await addDoc(
-    collection(db, "rankings", `level${currentLevel}`, "scores"),
-    {
-      name: nameInput.value,
-      score: score,
-      createdAt: new Date()
-    }
-  );
-  loadRanking();
+  try {
+    await addDoc(
+      collection(db, "rankings", `level${currentLevel}`, "scores"),
+      { name: nameInput.value, score, createdAt: new Date() }
+    );
+    loadRanking();
+  } catch(e) { console.error(e); }
 }
 
 async function loadRanking() {
   const ranking = document.getElementById("ranking");
   ranking.innerHTML = "";
-
-  const q = query(
-    collection(db, "rankings", `level${currentLevel}`, "scores"),
-    orderBy("score", "desc"),
-    limit(5)
-  );
-
-  const snap = await getDocs(q);
-  snap.forEach(doc => {
-    const li = document.createElement("li");
-    li.textContent = `${doc.data().name}：${doc.data().score}点`;
-    ranking.appendChild(li);
-  });
+  try {
+    const q = query(
+      collection(db, "rankings", `level${currentLevel}`, "scores"),
+      orderBy("score", "desc"),
+      limit(5)
+    );
+    const snap = await getDocs(q);
+    snap.forEach(doc => {
+      const li = document.createElement("li");
+      li.textContent = `${doc.data().name}：${doc.data().score}点`;
+      ranking.appendChild(li);
+    });
+  } catch(e) { console.error(e); }
 }
 
 // =====================
 // ユーティリティ
 // =====================
-function randomFrom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
+function randomFrom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 loadRanking();
+
