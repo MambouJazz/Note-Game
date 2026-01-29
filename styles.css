@@ -1,49 +1,37 @@
-/* 全体 */
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-               "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  font-family: system-ui, sans-serif;
   text-align: center;
   margin: 0;
   padding: 10px;
   background: #f7f7f7;
 }
 
-/* 見出し */
 h1 {
   font-size: 24px;
-  margin-bottom: 10px;
-}
-
-/* レベル選択 */
-#levelSelect {
-  margin-bottom: 10px;
 }
 
 .levelBtn {
-  font-size: 16px;
   padding: 8px 14px;
   margin: 4px;
+  font-size: 16px;
 }
-/* レベル選択：選択中 */
-.levelBtn.active {
-  background-color: #4caf50; /* 緑 */
+
+.levelBtn.selected {
+  background: #4caf50;
   color: white;
-  border-color: #4caf50;
 }
-/* スタートボタン */
+
 #startBtn {
   font-size: 24px;
   padding: 14px 40px;
   margin: 10px 0;
 }
 
-/* カウントダウン */
 #countdown {
   font-size: 22px;
   margin: 10px 0;
 }
 
-/* 音符表示 */
 .note-container {
   display: flex;
   justify-content: center;
@@ -56,10 +44,9 @@ h1 {
   margin: 0 6px;
 }
 
-/* 回答ボタン（スマホ基準） */
 #answerButtons {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* ★必ず2段になる */
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   max-width: 360px;
   margin: 0 auto 15px;
@@ -69,41 +56,15 @@ h1 {
   font-size: 18px;
   padding: 14px 0;
   border-radius: 8px;
-  border: 1px solid #888;
-  background: #fff;
 }
 
-/* 押したときに光る */
 #answerButtons button.active {
   background: #ffd966;
 }
-/* レベルボタン（通常） */
-.levelBtn {
-  font-size: 16px;
-  padding: 8px 14px;
-  margin: 4px;
-  border-radius: 6px;
-  border: 2px solid #aaa;
-  background: #fff;
-  cursor: pointer;
-}
 
-/* ★ 選択中のレベル */
-.levelBtn.selected {
-  background: #cce5ff;       /* 少し濃い色 */
-  border: 3px solid #0066cc; /* 太い枠 */
-  font-weight: bold;
-}
-
-/* PC・電子黒板だけ横一列 */
 @media (min-width: 900px) {
   #answerButtons {
     grid-template-columns: repeat(6, auto);
-    max-width: none;
     justify-content: center;
-  }
-
-  #answerButtons button {
-    padding: 12px 18px;
   }
 }

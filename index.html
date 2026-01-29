@@ -5,92 +5,47 @@
   <title>音符計算ゲーム</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS読み込み -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <h1>音符計算ゲーム</h1>
+<h1>音符計算ゲーム</h1>
 
-  <!-- レベル選択 -->
-  <div id="levelSelect">
-    <button class="levelBtn" data-level="1">新人</button>
-    <button class="levelBtn" data-level="2">先輩</button>
-    <button class="levelBtn" data-level="3">プロ</button>
-  </div>
+<!-- レベル選択 -->
+<div id="levelSelect">
+  <button class="levelBtn selected" data-level="1">初級</button>
+  <button class="levelBtn" data-level="2">中級</button>
+  <button class="levelBtn" data-level="3">上級</button>
+</div>
+
+<!-- 名前入力 -->
 <div>
-  <input
-    type="text"
-    id="playerName"
-    placeholder="名前（ニックネーム）"
-    maxlength="10"
-  >
+  <input id="playerName" placeholder="名前を入力" />
 </div>
-  <br>
 
-  <!-- スタート -->
-  <button id="startBtn" style="font-size: 24px; padding: 15px 40px;">
-    スタート
-  </button>
+<button id="startBtn">スタート</button>
 
-  <br><br>
+<div id="countdown"></div>
 
-  <!-- カウントダウン -->
-  <div id="countdown" style="font-size: 24px;"></div>
+<!-- 音符 -->
+<div id="notes" class="note-container"></div>
 
-  <!-- 音符表示 -->
-  <div id="notes" class="note-container"></div>
-
+<!-- 回答ボタン -->
 <div id="answerButtons">
-  <button onclick="pressValue(0.25, this)">0.25</button>
-  <button onclick="pressValue(0.5, this)">0.5</button>
-  <button onclick="pressValue(1, this)">1</button>
-<button onclick="pressValue(1.5, this)">1.5</button>
-  <button onclick="pressValue(2, this)">2</button>
-<button onclick="pressValue(3, this)">3</button>
-  <button onclick="pressValue(4, this)">4</button>
+  <button data-value="0.25">0.25</button>
+  <button data-value="0.5">0.5</button>
+  <button data-value="1">1</button>
+  <button data-value="2">2</button>
+  <button data-value="3">3</button>
+  <button data-value="4">4</button>
 </div>
-  <p>レベルを選んでスタートを押す！</p>
-  <br>
-<h2 id="reviewTitle" style="display:none;">まちがえた問題</h2>
-<div id="review"></div>
-  <!-- スコア表示 -->
-  <div id="score" style="font-size: 20px;">
-    スコア：0
-  </div>
 
-  <br><br>
+<div id="score">スコア：0</div>
 
-  <!-- ランキング -->
-  <h2>ランキング</h2>
-  <ol id="ranking"></ol>
+<h2>ランキング</h2>
+<ol id="ranking"></ol>
 
-//firestoreモジュール
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyApFeYhgvjlRj-0e2tMLp5sbWigohvdjKs",
-    authDomain: "note-game-da61b.firebaseapp.com",
-    projectId: "note-game-da61b",
-    storageBucket: "note-game-da61b.firebasestorage.app",
-    messagingSenderId: "713519714721",
-    appId: "1:713519714721:web:2f9134e804d6f1e4a77be0",
-    measurementId: "G-6R83CXLRWH"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
-  <!-- JavaScript読み込み -->
-  <script type="module" src="script.js"></script>
-
+<!-- JS（module） -->
+<script type="module" src="script.js"></script>
 </body>
 </html>
