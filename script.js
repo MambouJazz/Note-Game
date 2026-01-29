@@ -12,7 +12,7 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+// Firebase config（※実際はあなたのものを使用）
 const firebaseConfig = {
   apiKey: "AIzaSyApFeYhgvjlRj-0e2tMLp5sbWigohvdjKs",
   authDomain: "note-game-da61b.firebaseapp.com",
@@ -22,6 +22,7 @@ const firebaseConfig = {
   appId: "1:713519714721:web:2f9134e804d6f1e4a77be0",
   measurementId: "G-6R83CXLRWH"
 };
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -36,6 +37,9 @@ let timer = null;
 let isPlaying = false;
 let currentInput = 0;
 
+let missCount = 0;
+const MISS_LIMIT = 3;
+
 // DOM
 const notesDiv = document.getElementById("notes");
 const scoreText = document.getElementById("score");
@@ -46,7 +50,6 @@ const nameInput = document.getElementById("playerName");
 // =====================
 const correctSound = new Audio("correct.mp3");
 const wrongSound = new Audio("wrong.mp3");
-
 // =====================
 // 音符データ
 // =====================
@@ -92,6 +95,8 @@ function resetGame() {
   timeLeft = 10;
   isPlaying = false;
   currentInput = 0;
+  missCount = 0;
+
   scoreText.textContent = "スコア：0";
   countdownText.textContent = "";
   notesDiv.innerHTML = "";
@@ -109,6 +114,7 @@ function startGame() {
   timer = setInterval(() => {
     timeLeft--;
     countdownText.textContent = `残り ${timeLeft} 秒`;
+
     if (timeLeft <= 0) {
       clearInterval(timer);
       isPlaying = false;
@@ -150,6 +156,7 @@ function showNotes(notes) {
     const img = document.createElement("img");
     img.src = note.img;
     notesDiv.appendChild(img);
+
     if (i < notes.length - 1) {
       const plus = document.createElement("span");
       plus.textContent = "＋";
@@ -160,7 +167,7 @@ function showNotes(notes) {
 }
 
 // =====================
-// 入力
+// 入力処理
 // =====================
 window.pressValue = function (value, btn) {
   if (!isPlaying) return;
@@ -185,6 +192,14 @@ window.pressValue = function (value, btn) {
     nextQuestion();
   }
 };
+// =====================
+// 失格処理
+// =====================
+function gameOver() {
+  clearInterval(timer);
+  isPlaying = false;
+  countdownText.textContent = "失格！（不正解3回）";
+}
 
 // =====================
 // Firestore 保存・取得
