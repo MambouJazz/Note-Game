@@ -58,7 +58,7 @@ const level1Notes = [
   { img: "quarter-note.png", value: 1 },
   { img: "half-note.png", value: 2 },
   { img: "full-note.png", value: 4 },
-  { img: "sixteenth-kyufu.png", value: 0.25 },
+{ img: "sixteenth-kyufu.png", value: 0.25 },
   { img: "eights-kyufu.png", value: 0.5 },
   { img: "quarter-kyufu.png", value: 1 },
   { img: "half-kyufu.png", value: 2 }
@@ -277,4 +277,3 @@ function randomFrom(arr) {
 }
 
 loadRanking();
-
