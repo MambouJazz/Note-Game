@@ -166,35 +166,40 @@ function showNotes(notes) {
 // =====================
 // 入力処理
 // =====================
+let wrongCount = 0; // 連続不正解カウント
+
 window.pressValue = function (value, btn) {
   if (!isPlaying) return;
 
-  currentInput += value;
+  // 1回の回答として currentInput に代入（加算ではなく）
+  currentInput = value;
 
   // ボタンを光らせる
   btn.classList.add("active");
   setTimeout(() => btn.classList.remove("active"), 150);
 
+  // 判定
   if (Math.abs(currentInput - correctAnswer) < 0.001) {
     correctSound.play();
     score++;
     scoreText.textContent = `スコア：${score}`;
     wrongCount = 0; // 正解したらリセット
-    nextQuestion();
-  } else if (currentInput > correctAnswer) {
+  } else {
     wrongSound.play();
-    wrongCount++; // 不正解カウントを増やす
+    wrongCount++;
     if (wrongCount >= 3) {
-      // ★失格処理
+      // 失格
       countdownText.textContent = "失格！";
       isPlaying = false;
       clearInterval(timer);
       saveScore();
       notesDiv.innerHTML = "";
-    } else {
-      nextQuestion();
+      return;
     }
   }
+
+  // 次の問題へ
+  nextQuestion();
 };
 
 // =====================
