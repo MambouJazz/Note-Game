@@ -36,6 +36,7 @@ let timeLeft = 10;
 let timer = null;
 let isPlaying = false;
 let currentInput = 0;
+let wrongCount = 0; // 連続不正解カウント
 
 let missCount = 0;
 const MISS_LIMIT = 3;
@@ -169,29 +170,30 @@ window.pressValue = function (value, btn) {
   if (!isPlaying) return;
 
   currentInput += value;
+
+  // ボタンを光らせる
   btn.classList.add("active");
   setTimeout(() => btn.classList.remove("active"), 150);
 
-  // 正解
   if (Math.abs(currentInput - correctAnswer) < 0.001) {
+    correctSound.play();
     score++;
     scoreText.textContent = `スコア：${score}`;
-    currentInput = 0;
+    wrongCount = 0; // 正解したらリセット
     nextQuestion();
-    return;
-  }
-
-  // 不正解（オーバー）
-  if (currentInput > correctAnswer) {
-    missCount++;
-
-    if (missCount >= MISS_LIMIT) {
-      gameOver();
-      return;
+  } else if (currentInput > correctAnswer) {
+    wrongSound.play();
+    wrongCount++; // 不正解カウントを増やす
+    if (wrongCount >= 3) {
+      // ★失格処理
+      countdownText.textContent = "失格！";
+      isPlaying = false;
+      clearInterval(timer);
+      saveScore();
+      notesDiv.innerHTML = "";
+    } else {
+      nextQuestion();
     }
-
-    currentInput = 0;
-    nextQuestion();
   }
 };
 
