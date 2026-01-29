@@ -7,7 +7,15 @@ body {
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 22px;
+}
+
+#nameArea {
+  margin-bottom: 10px;
+}
+
+#levelSelect {
+  margin-bottom: 10px;
 }
 
 .levelBtn {
@@ -22,20 +30,16 @@ h1 {
 }
 
 #startBtn {
-  font-size: 24px;
-  padding: 14px 40px;
-  margin: 10px 0;
+  font-size: 22px;
+  padding: 10px 30px;
 }
 
 #countdown {
-  font-size: 22px;
-  margin: 10px 0;
+  margin: 10px;
+  font-size: 18px;
 }
 
 .note-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   margin: 15px 0;
 }
 
@@ -49,13 +53,12 @@ h1 {
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   max-width: 360px;
-  margin: 0 auto 15px;
+  margin: 0 auto;
 }
 
 #answerButtons button {
   font-size: 18px;
   padding: 14px 0;
-  border-radius: 8px;
 }
 
 #answerButtons button.active {
