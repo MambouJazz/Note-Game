@@ -57,18 +57,18 @@ const level1Notes = [
   { img: "eights-note.png", value: 0.5 },
   { img: "quarter-note.png", value: 1 },
   { img: "half-note.png", value: 2 },
-  { img: "full-note.png", value: 4 }
+  { img: "full-note.png", value: 4 },
 { img: "sixteenth-kyfu.png", value: 0.25 },
   { img: "eights-kyufu.png", value: 0.5 },
   { img: "quarter-kyufu.png", value: 1 },
-  { img: "half-kyufu.png", value: 2 },
+  { img: "half-kyufu.png", value: 2 }
   
 ];
 const level2Notes = level1Notes;
 const level3Notes = [...level1Notes,
  { img: "dotted-half-note.png", value: 3 },
  { img: "dotted-quarter-note.png", value: 3 },
- { img: "dotted-eights-note.png", value: 3 },
+ { img: "dotted-eights-note.png", value: 3 }
 
 ];
 
