@@ -45,11 +45,7 @@ const notesDiv = document.getElementById("notes");
 const scoreText = document.getElementById("score");
 const countdownText = document.getElementById("countdown");
 const nameInput = document.getElementById("playerName");
-// =====================
-// 効果音
-// =====================
-const correctSound = new Audio("correct.mp3");
-const wrongSound = new Audio("wrong.mp3");
+
 // =====================
 // 音符データ
 // =====================
@@ -173,25 +169,32 @@ window.pressValue = function (value, btn) {
   if (!isPlaying) return;
 
   currentInput += value;
-
   btn.classList.add("active");
   setTimeout(() => btn.classList.remove("active"), 150);
 
+  // 正解
   if (Math.abs(currentInput - correctAnswer) < 0.001) {
-    correctSound.currentTime = 0;
-    correctSound.play();
-
     score++;
     scoreText.textContent = `スコア：${score}`;
+    currentInput = 0;
     nextQuestion();
+    return;
+  }
 
-  } else if (currentInput > correctAnswer) {
-    wrongSound.currentTime = 0;
-    wrongSound.play();
+  // 不正解（オーバー）
+  if (currentInput > correctAnswer) {
+    missCount++;
 
+    if (missCount >= MISS_LIMIT) {
+      gameOver();
+      return;
+    }
+
+    currentInput = 0;
     nextQuestion();
   }
 };
+
 // =====================
 // 失格処理
 // =====================
