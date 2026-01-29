@@ -1,50 +1,59 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>音符ゲーム</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <title>音符計算ゲーム</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <h1>音符の長さゲーム</h1>
+  <h1>音符計算ゲーム</h1>
 
   <!-- 名前入力 -->
-  <div id="nameArea">
-    名前：
+  <div>
     <input type="text" id="playerName" placeholder="名前を入力" />
   </div>
 
   <!-- レベル選択 -->
   <div id="levelSelect">
-    <button class="levelBtn selected" data-level="1">初級</button>
-    <button class="levelBtn" data-level="2">中級</button>
-    <button class="levelBtn" data-level="3">上級</button>
+    <button class="levelBtn" data-level="1">新人</button>
+    <button class="levelBtn" data-level="2">先輩</button>
+    <button class="levelBtn" data-level="3">プロ</button>
   </div>
 
+  <!-- スタート -->
   <button id="startBtn">スタート</button>
 
+  <!-- カウントダウン -->
   <div id="countdown"></div>
-  <div id="score">スコア：0</div>
 
+  <!-- 音符表示 -->
   <div id="notes" class="note-container"></div>
 
   <!-- 回答ボタン -->
   <div id="answerButtons">
-    <button onclick="pressValue(4,this)">4</button>
-    <button onclick="pressValue(3,this)">3</button>
-    <button onclick="pressValue(2,this)">2</button>
-    <button onclick="pressValue(1,this)">1</button>
-    <button onclick="pressValue(0.5,this)">0.5</button>
     <button onclick="pressValue(0.25,this)">0.25</button>
-
+    <button onclick="pressValue(0.5,this)">0.5</button>
+    <button onclick="pressValue(1,this)">1</button>
+    <button onclick="pressValue(2,this)">2</button>
+    <button onclick="pressValue(3,this)">3</button>
+    <button onclick="pressValue(4,this)">4</button>
   </div>
 
+  <!-- スコア -->
+  <div id="score">スコア：0</div>
+
+  <!-- 間違えた問題 -->
+  <h2>間違えた問題（先輩・プロ）</h2>
+  <ol id="wrongQuestions"></ol>
+
+  <!-- ランキング -->
   <h2>ランキング</h2>
   <ol id="ranking"></ol>
 
-  <!-- Firebase -->
+  <!-- Firebase & JS -->
   <script type="module" src="script.js"></script>
+
 </body>
 </html>
