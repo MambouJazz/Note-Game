@@ -60,7 +60,7 @@ const level1Notes = [
   { img: "full-note.png", value: 4 },
 { img: "sixteenth-kyufu.png", value: 0.25 },
   { img: "eighth-kyufu.png", value: 0.5 },
-  { img: "quarte	r-kyufu.png", value: 1 },
+  { img: "quarter-kyufu.png", value: 1 },
   { img: "half-kyufu.png", value: 2 }
   
 ];
