@@ -41,6 +41,11 @@ h1 { font-size: 24px; margin-bottom: 10px; }
 }
 #answerButtons button.active { background: #ffd966; }
 
+#ranking {
+  list-style-type: decimal; /* 1,2,3 */
+  padding-left: 1.5em;
+}
+
 @media (min-width: 900px) {
   #answerButtons { grid-template-columns: repeat(6, auto); max-width: none; justify-content: center; }
   #answerButtons button { padding: 12px 18px; }
