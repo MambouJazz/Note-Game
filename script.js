@@ -202,9 +202,12 @@ window.pressValue = function(value, btn) {
   } else if (currentInput > correctAnswer) {
     wrongSound.play();
     // 間違えた問題を記録
+      if (wrongQuestions.length > 0) {
     wrongQuestions[wrongQuestions.length - 1].wrong = true;
-    nextQuestion();
   }
+
+  nextQuestion();
+}
 };
 
 // =====================
